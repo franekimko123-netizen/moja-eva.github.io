@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Genesis Evangelion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a0033 0%, #330066 50%, #4d0099 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Menu nawigacyjne */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 3px solid #ff6b9d;
+            box-shadow: 0 4px 20px rgba(255, 107, 157, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff6b9d;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: #ff6b9d;
+            background: rgba(255, 107, 157, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #ff6b9d;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after {
+            width: 80%;
+        }
+
+        /* Hero sekcja */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 70px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 107, 157, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(255, 107, 157, 0.8);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(255, 107, 157, 0.5); }
+            to { text-shadow: 0 0 40px rgba(255, 107, 157, 1); }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Sekcje */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #ff6b9d;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.5);
+        }
+
+        .content {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .content:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 107, 157, 0.6);
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.3);
+        }
+
+        .content p {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Karty postaci */
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .character-card {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .character-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            border-color: #8a2be2;
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.5);
+        }
+
+        .character-card h3 {
+            color: #8a2be2;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Sekcja kontakt */
+        .discord-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding: 3rem;
+        }
+
+        .discord-card {
+            background: rgba(88, 101, 242, 0.2);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 3px solid rgba(88, 101, 242, 0.5);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .discord-card:hover {
+            transform: translateY(-10px);
+            border-color: #5865f2;
+            box-shadow: 0 20px 50px rgba(88, 101, 242, 0.4);
+        }
+
+        .discord-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1.5rem;
+            background: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.5);
+            overflow: hidden;
+        }
+        
+        .discord-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .discord-btn {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: linear-gradient(135deg, #5865f2, #7289da);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(88, 101, 242, 0.4);
+            margin-top: 1rem;
+        }
+
+        .discord-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 40px rgba(88, 101, 242, 0.6);
+            background: linear-gradient(135deg, #7289da, #5865f2);
+        }
+
+        /* Stopka */
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            text-align: center;
+            padding: 2rem;
+            border-top: 3px solid #ff6b9d;
+        }
+
+        /* Animacje pojawiania się */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Responsywność */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .nav-links a {
+                padding: 0.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            section h2 {
+                font-size: 2rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu nawigacyjne -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/adec4e29-6ea4-421d-a9de-92a1b5e1ce89/d2b1ps7-6186f85b-fe1c-4592-b7bc-31f8ed95c6a5.png" alt="NERV Logo" onerror="this.parentElement.innerHTML='⚡'">
+                </div>
+                EVA
+            </div>
+            <ul class="nav-links">
+                <li><a onclick="scrollToSection('home')">Start</a></li>
+                <li><a onclick="scrollToSection('fabula')">Fabuła</a></li>
+                <li><a onclick="scrollToSection('postacie')">Postacie</a></li>
+                <li><a onclick="scrollToSection('eva')">Eva Units</a></li>
+                <li><a onclick="scrollToSection('kontakt')">Kontakt</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero sekcja -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>NEON GENESIS EVANGELION</h1>
+            <p>Ludzkość stoi w obliczu zagłady. Tylko Eva może nas uratować.</p>
+        </div>
+    </section>
+
+    <!-- Sekcja Fabuła -->
+    <section id="fabula">
+        <h2 class="fade-in">Fabuła</h2>
+        <div class="content fade-in">
+            <p>
+                <strong>Neon Genesis Evangelion</strong> to kultowe anime z 1995 roku stworzone przez Hideaki Anno. 
+                Serial opowiada historię Shinji Ikari, czternastoletniego chłopca, który zostaje wezwany przez swojego ojca do Tokyo-3, 
+                aby pilotować gigantycznego biorobota znanego jako Evangelion.
+            </p>
+            <p>
+                Akcja rozgrywa się w postapokaliptycznym świecie, 15 lat po katastrofie zwanej Drugim Uderzeniem, 
+                która zniszczyła większość ludzkości. Teraz tajemnicze istoty zwane Aniołami atakują Ziemię, 
+                a jedyną nadzieją obrony jest organizacja NERV i jej roboty Evangelion.
+            </p>
+            <p>
+                Serial głęboko eksploruje psychologię postaci, traumy, izolację i egzystencjalne dylematy. 
+                To nie tylko historia o walce z potworami, ale przede wszystkim o wewnętrznych konfliktach, 
+                strachu przed odrzuceniem i poszukiwaniu sensu życia.
+            </p>
+        </div>
+        <div class="content fade-in">
+            <p>
+                <strong>Drugie Uderzenie</strong> to katastroficzna eksplozja, która miała miejsce w Antarktydzie 15 września 2000 roku.
+                Wydarzenie to spowodowało drastyczne zmiany klimatyczne, podniesienie poziomu mórz i śmierć połowy ludzkości.
+                Oficjalnie uznane za uderzenie meteorytu, ale prawda jest znacznie mroczniejsza - było to efekt kontaktu z Pierwszym Aniołem, Adamem.
+            </p>
+        </div>
+        <div class="content fade-in">
+            <p>
+                <strong>NERV</strong> to tajemnicza organizacja paramilitarna odpowiedzialna za obronę ludzkości przed Aniołami.
+                Dowodzona przez Gendo Ikari, organizacja prowadzi również tajemniczy Projekt Ludzkiego Uzupełnienia (Human Instrumentality Project),
+                którego prawdziwe cele pozostają nieznane przez większość pracowników. NERV działa pod pozorem organizacji ONZ GEHIRN.
+            </p>
+        </div>
+    </section>
+
+    <!-- Sekcja Postacie -->
+    <section id="postacie">
+        <h2 class="fade-in">Główne Postacie</h2>
+        <div class="characters-grid">
+            <div class="character-card scale-in">
+                <h3>Shinji Ikari</h3>
+                <p>Pilot Eva Unit-01. Niepewny siebie nastolatek, który zmaga się z traumami i brakiem akceptacji ze strony ojca. 
+                Zostaje wezwany do Tokyo-3, aby pilotować Evangeliona pomimo braku szkolenia i chęci do walki.</p>
+            </div>
+            <div class="character-card scale-in">
+                <h3>Rei Ayanami</h3>
+                <p>Pilot Eva Unit-00. Enigmatyczna i spokojna dziewczyna o tajemniczym pochodzeniu i głębokiej więzi z komendantem Ikari. 
+                Jest pierwszą pilotką i ma niezwykłą zdolność do synchronizacji z Eva.</p>
+            </div>
+            <div class="character-card scale-in">
+                <h3>Asuka Langley</h3>
+                <p>Pilot Eva Unit-02. Pewna siebie i impulsywna pilotka z Niemiec, która ukrywa głębokie emocjonalne blizny pod maską pewności siebie. 
+                Jest niezwykle dumna ze swojego statusu pilotki Eva.</p>
+            </div>
+            <div class="character-card scale-in">
+                <h3>Gendo Ikari</h3>
+                <p>Komendant NERV i ojciec Shinji. Tajemniczy i zimny człowiek, który prowadzi własną agendę związaną z Projektem Ludzkiego Uzupełnienia. 
+                Jego prawdziwe motywacje są skryte przed światem.</p>
+            </div>
+            <div class="character-card scale-in">
+                <h3>Misato Katsuragi</h3>
+                <p>Major NERV i opiekunka Shinji. Pozornie beztroski dorosły, który ukrywa traumę z przeszłości związaną z Drugim Uderzeniem. 
+                Odpowiedzialna za taktyczne dowodzenie w walce z Aniołami.</p>
+            </div>
+            <div class="character-card scale-in">
+                <h3>Kaworu Nagisa</h3>
+                <p>Piąty pilot i siedemnasty Anioł. Tajemnicza postać, która ma ogromny wpływ na Shinji i kluczową rolę w finale serii. 
+                Jest pierwszym człowiekiem, który okazuje Shinjiemu bezwarunkową akceptację.</p>
+            </div>
+            <div class="character-card scale-in">
+                <h3>Ritsuko Akagi</h3>
+                <p>Szefowa naukowa NERV i projektantka systemów MAGI. Genialna naukowczyni odpowiedzialna za techniczne aspekty Evangelionów. 
+                Ma skomplikowaną relację z Gendo Ikari.</p>
+            </div>
+            <div class="character-card scale-in">
+                <h3>Ryoji Kaji</h3>
+                <p>Specjalny inspektor NERV i były chłopak Misato. Działa jako podwójny, a może nawet potrójny agent, 
+                próbując odkryć prawdę o NERV i SEELE.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sekcja Eva Units -->
+    <section id="eva">
+        <h2 class="fade-in">Evangelion Units</h2>
+        <div class="content fade-in">
+            <p>
+                <strong>Evangeliony</strong> to nie tylko maszyny - są to biomechaniczne jednostki zawierające dusze. 
+                Piloci synchronizują się z nimi poprzez specjalne kombinezony i system Entry Plug. 
+                Prawdziwa natura Evangelionów jest jedną z największych tajemnic NERV.
+            </p>
+        </div>
+        <div class="characters-grid">
+            <div class="character-card scale-in">
+                <h3>Eva Unit-01</h3>
+                <p>Fioletowy Eva pilotowany przez Shinji. Najważniejsza jednostka z unikalną zdolnością do osiągnięcia stanu Berserk 
+                i niezależnego działania. Zawiera duszę matki Shinji, Yui Ikari. Jedyna Eva zbudowana z Lilith zamiast Adama.</p>
+            </div>
+            <div class="character-card scale-in">
+                <h3>Eva Unit-00</h3>
+                <p>Niebieski prototyp pilotowany przez Rei. Pierwsza ukończona jednostka, znana z niestabilności podczas testów. 
+                Posiada ograniczone możliwości bojowe, ale stanowi fundament dla późniejszych modeli.</p>
+            </div>
+            <div class="character-card scale-in">
+                <h3>Eva Unit-02</h3>
+                <p>Czerwony Eva pilotowany przez Asukę. Pierwsza jednostka produkcyjna, zbudowana w Niemczech. 
+                Zaprojektowana specjalnie do walki, posiada najwyższy współczynnik synchronizacji spośród wszystkich jednostek.</p>
+            </div>
+            <div class="character-card scale-in">
+                <h3>Eva Unit-03</h3>
+                <p>Czarny Eva wysłany z USA do Japonii. Podczas testów aktywacyjnych zostaje zainfekowany przez trzynastego Anioła, Bardiel. 
+                Jednostka zostaje zniszczona przez Eva Unit-01 w trybie Dummy Plug.</p>
+            </div>
+            <div class="character-card scale-in">
+                <h3>Eva Unit-04</h3>
+                <p>Eva zbudowana w USA, która została zniszczona podczas eksperymentu z silnikiem S². 
+                Katastrofa spowodowała całkowite zniknięcie drugiej gałęzi NERV w Nevada.</p>
+            </div>
+            <div class="character-card scale-in">
+                <h3>Eva Mass Production</h3>
+                <p>Serie białych Eva zbudowanych przez SEELE na podstawie Eva Unit-02. Wyposażone w silniki S², 
+                co czyni je niemal niezniszczalnymi. Używane w finale The End of Evangelion.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sekcja Kontakt -->
+    <section id="kontakt">
+        <h2 class="fade-in">Dołącz do Społeczności!</h2>
+        <div class="discord-container">
+            <div class="discord-card scale-in">
+                <div class="discord-icon">
+                    <img src="https://th.bing.com/th/id/R.79880761773d4116009ad9c390d01721?rik=BkE9ciIRjrIvMw&pid=ImgRaw&r=0" alt="Discord Icon" onerror="this.parentElement.innerHTML='💬'">
+                </div>
+                <h3 style="color: #5865f2; font-size: 2rem; margin-bottom: 1rem;">Nasz Serwer Discord</h3>
+                <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">
+                    Dołącz do naszej społeczności fanów Evangeliona! Rozmawiaj o anime, dziel się teoriami, 
+                    poznawaj innych fanów i baw się razem z nami! 🎮
+                </p>
+                <a href="https://discord.gg/BUjp32Mp" target="_blank" class="discord-btn">
+                    💬 Dołącz do Serwera
+                </a>
+            </div>
+            <div class="content fade-in" style="max-width: 600px;">
+                <p style="text-align: center;">
+                    Na serwerze znajdziesz:
+                </p>
+                <p style="text-align: center; margin-top: 1rem;">
+                    ✨ Dyskusje o Evangelionie i innych anime<br>
+                    🎨 Kanały do dzielenia się fanartami<br>
+                    💬 Gadanie i pisanie<br>
+                    🎮 Wspólne granie i oglądanie<br>
+                    💜 Przyjazna społeczność
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stopka -->
+    <footer>
+        <p>© 2025 Neon Genesis Evangelion Fan Page | Wszystkie prawa zastrzeżone dla Wafelka3233</p>
+        <p style="margin-top: 1rem; opacity: 0.7;">Strona stworzona przez Wafelek3233 dla fanów</p>
+    </footer>
+
+    <script>
+        // Funkcja do płynnego przewijania
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                const navHeight = document.querySelector('nav').offsetHeight;
+                const sectionTop = section.offsetTop - navHeight;
+                window.scrollTo({
+                    top: sectionTop,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Efekt parallax dla hero
+        window.addEventListener('scroll', () => {
+            const hero = document.querySelector('.hero');
+            const scrolled = window.pageYOffset;
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Animacje przy scrollowaniu
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Obserwuj wszystkie elementy z klasami animacji
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-in');
+            animatedElements.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
